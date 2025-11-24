@@ -6,6 +6,11 @@ namespace WebApplication1.Models
     {
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Clinic> Clinics { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<VideoCallSession> VideoCallSessions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

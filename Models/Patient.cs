@@ -8,20 +8,29 @@ namespace WebApplication1.Models
 
 
         [Key]
-        public int Patient_Id { get; set; }
+        public int PatientId { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public string PasswordHashed { get; set; }
+        [Required]
+      
         public string PhoneNumber { get; set; }
-        public string BloodGroup { get; set; }
-        public decimal Height { get; set; }
-        public decimal Weight { get; set; }
+        [Required]
+        public int Age { get; set; }
+        [Required]
+        public string Gender { get; set; }
+        public string? BloodGroup { get; set; }
+        public decimal? Height { get; set; }
+        public decimal? Weight { get; set; }
         public string Allergies { get; set; }
         public string Address { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
+     
+     
     }
 }
 
