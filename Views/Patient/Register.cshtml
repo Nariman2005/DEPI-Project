@@ -1,62 +1,69 @@
-﻿
+﻿@model Patient
 
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-7 col-md-9">
-                <div class="card shadow">
-                    <div class="card-body p-4">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow">
+                <div class="card-body p-4">
 
-                        <h3 class="mb-4 text-center">Patient Registration</h3>
+                    <h3 class="mb-4 text-center">Patient Registration</h3>
 
-                        <form action="/Patient/Register" method="post">
+                    <form  method="post">
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" name="FirstName" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" name="LastName" class="form-control" required>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">First Name</label>
+                                <input asp-for="FirstName" type="text" class="form-control" required>
+                               
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="Email" class="form-control" required>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">Last Name</label>
+                                <input asp-for="LastName" type="text" class="form-control" required>
+                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" type="email" class="form-control" required>
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PasswordHashed" class="form-label">Password</label>
+                                <input asp-for="PasswordHashed" type="password" class="form-control" required>
+                               
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" name="PasswordHashed" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="text" name="PhoneNumber" class="form-control" required>
-                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                <input asp-for="PhoneNumber" type="text" class="form-control" required>
+                                
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Age</label>
-                                    <input type="number" name="Age" min="0" class="form-control" required>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Age" class="form-label">Age</label>
+                                <input asp-for="Age" type="number" min="0" class="form-control" required>
+                                
+                            </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Gender</label>
-                                <select name="Gender" class="form-select" required>
+                                <label asp-for="Gender" class="form-label">Gender</label>
+                                <select asp-for="Gender" class="form-select" required>
                                     <option value="" selected disabled>Select</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
+                               
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Blood Group</label>
-                                <select name="BloodGroup" class="form-select">
+                                <label asp-for="BloodGroup" class="form-label">Blood Group</label>
+                                <select asp-for="BloodGroup" class="form-select">
                                     <option value="">None</option>
                                     <option value="A+">A+</option>
                                     <option value="A-">A-</option>
@@ -67,40 +74,45 @@
                                     <option value="O+">O+</option>
                                     <option value="O-">O-</option>
                                 </select>
+                                
                             </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Height" class="form-label">Height (cm)</label>
+                                <input asp-for="Height" type="number" step="0.1" class="form-control">
+                                
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Weight" class="form-label">Weight (kg)</label>
+                                <input asp-for="Weight" type="number" step="0.1" class="form-control">
+                               
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Allergies" class="form-label">Allergies</label>
+                            <textarea asp-for="Allergies" rows="2" class="form-control"></textarea>
                            
+                        </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Height (cm)</label>
-                                    <input type="number" step="0.1" name="Height" class="form-control">
-                                </div>
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Address</label>
+                            <textarea asp-for="Address" rows="2" class="form-control"></textarea>
+                            
+                        </div>
 
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Weight (kg)</label>
-                                    <input type="number" step="0.1" name="Weight" class="form-control">
-                                </div>
-                            </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
 
-                            <div class="mb-3">
-                                <label class="form-label">Allergies</label>
-                                <textarea name="Allergies" rows="2" class="form-control"></textarea>
-                            </div>
+                    </form>
 
-                            <div class="mb-3">
-                                <label class="form-label">Address</label>
-                                <textarea name="Address" rows="2" class="form-control"></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
-
-                        </form>
-
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

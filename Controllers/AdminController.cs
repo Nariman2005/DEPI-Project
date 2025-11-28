@@ -9,9 +9,11 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult Register()
+        public IActionResult Dashboard()
         {
             return View();
         }
+
+
     }
 }
