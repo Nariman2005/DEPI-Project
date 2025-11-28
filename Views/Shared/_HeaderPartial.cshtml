@@ -1,0 +1,158 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="header-info-bar d-none d-xxl-block">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="icon-bx-wraper style-5">
+                    <div class="icon-bx">
+                        <span class="icon-cell">
+                            <img src="~/images/svg/icon1.svg" alt="">
+                        </span>
+                    </div>
+                    <div class="icon-content">
+                        <h2 class="dz-title text-primary">Contact Us</h2>
+                        <p><a href="tel:+11234567890" class="text-secondary">+1 123 456 7890</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="icon-bx-wraper style-5">
+                    <div class="icon-bx">
+                        <span class="icon-cell">
+                            <img src="~/images/svg/icon2.svg" alt="">
+                        </span>
+                    </div>
+                    <div class="icon-content">
+                        <h2 class="dz-title text-primary">Email Supports</h2>
+                        <p><a href="mailto:email@domain.com" class="text-secondary">email@domain.com</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="icon-bx-wraper style-5">
+                    <div class="icon-bx">
+                        <span class="icon-cell">
+                            <img src="~/images/svg/icon3.svg" alt="">
+                        </span>
+                    </div>
+                    <div class="icon-content">
+                        <h2 class="dz-title text-primary">Online Appointment</h2>
+                        <p>Book Now</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="icon-bx-wraper style-5">
+                    <div class="icon-bx">
+                        <span class="icon-cell">
+                            <img src="~/images/svg/icon4.svg" alt="">
+                        </span>
+                    </div>
+                    <div class="icon-content">
+                        <h2 class="dz-title text-primary">Supports</h2>
+                        <p>24x7 Supports</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="icon-bx-wraper style-5">
+                    <div class="icon-bx">
+                        <span class="icon-cell">
+                            <img src="~/images/svg/icon5.svg" alt="">
+                        </span>
+                    </div>
+                    <div class="icon-content">
+                        <h2 class="dz-title text-primary">Payment</h2>
+                        <p>Pay Online</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<div class="sticky-header main-bar-wraper">
+    <div class="main-bar clearfix bg-secondary text-white">
+        <div class="container-fluid clearfix inner-bar">
+            <!-- Website Logo -->
+            <div class="logo-header logo-dark">
+                <a asp-controller="Home" asp-action="Index"><img src="~/images/logo-white.svg" alt="logo"></a>
+            </div>
+
+            <!-- Nav Toggle Button -->
+            <button class="w3menu-toggler navicon" type="button" data-target="#W3Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Main Nav -->
+            <div class="menu-close fade-overlay"></div>
+            <div class="header-nav w3menu w3menu-end mo-left" id="W3Menu">
+                <div class="logo-header logo-dark">
+                    <a asp-controller="Home" asp-action="Index"><img src="~/images/logo.svg" alt=""></a>
+                </div>
+               
+
+                <div class="dz-social-icon">
+                    <ul>
+                        <li><a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li><a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
+                        <li><a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            
+            <!-- Sidebar -->
+            <div class="offcanvas dz-offcanvas offcanvas offcanvas-end" tabindex="-1" id="headerSidebar">
+                <button type="button" class="btn-close m-t10 m-l10" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <div class="offcanvas-body">
+                    <div class="widget">
+                        <div class="sidebar-header m-b20">
+                            <a asp-controller="Home" asp-action="Index"><img src="~/images/file.svg" alt="/"></a>
+                        </div>
+                        <p>
+                            MedPal is your trusted healthcare companion, connecting patients with qualified
+                            medical professionals through our innovative telemedicine platform. Experience
+                            convenient, accessible, and quality healthcare services from the comfort of your home with
+                            our user-friendly digital health solution.
+                        </p>
+                    </div>
+
+                    <div class="widget">
+                        <div class="widget-title">
+                            <h4 class="title">Contact Us</h4>
+                        </div>
+                        <ul class="list-check">
+                            <li>123 Tahrir Square, Cairo, Egypt</li>
+                            <li><a href="mailto:medpal@depi.com" class="text-body">medpal@depi.com</a></li>
+                            <li><a href="tel:+11234567890" class="text-body">+1 123 456 7890</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="widget">
+                        <div class="widget-title">
+                            <h4 class="title">Follow Us</h4>
+                        </div>
+                        <div class="dz-social-icon style-1">
+                            <ul>
+                                <li><a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
+                                <li><a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                <li><a href="https://www.youtube.com" target="_blank"><i class="fa-brands fa-youtube"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,86 +1,22 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-theme-color="skin-1">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - MedPal</title>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="~/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="~/vendor/bootstrap-select/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="~/vendor/magnific-popup/magnific-popup.min.css">
-    <link rel="stylesheet" href="~/css/style.css">
-
-    @await RenderSectionAsync("Styles", required: false)
+    <partial name="_HeadPartial"></partial>
 </head>
+
 <body id="bg">
     <div class="page-wraper">
+        <!-- Preloader -->
+        <partial name="_PreloaderPartial"></partial>
+
         <!-- Header -->
         <header class="site-header header style-1">
-            <div class="sticky-header main-bar-wraper">
-                <div class="main-bar clearfix bg-secondary text-white">
-                    <div class="container-fluid clearfix inner-bar">
-                        <!-- Logo -->
-                        <div class="logo-header logo-dark">
-                            <a href="@Url.Action("Index", "Home")">
-                                <img src="~/images/logo.svg" alt="MedPal">
-                            </a>
-                        </div>
-
-                        <!-- Navigation -->
-                        <div class="header-nav w3menu w3menu-end mo-left">
-                            <ul class="nav navbar-nav">
-                                <li><a asp-controller="Home" asp-action="Index"><span>Home</span></a></li>
-                                <li><a asp-controller="Account" asp-action="Login"><span>Login</span></a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Extra Nav -->
-                        <div class="extra-nav">
-                            <div class="extra-cell">
-                                <ul class="header-right">
-                                    <li class="nav-item">
-                                        <a href="#appointment-section" class="btn btn-primary btn-hover1">
-                                            Instant Video Call
-                                        </a>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a href="#" class="btn btn-outline-primary btn-hover1 ms-2 dropdown-toggle rounded-circle p-2"
-                                           data-bs-toggle="dropdown" aria-expanded="false"
-                                           style="width: 40px; height: 40px;">
-                                            <i class="feather icon-user"></i>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Account" asp-action="DoctorLogin">
-                                                    <i class="feather icon-user-check me-2"></i>
-                                                    Doctor
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Account" asp-action="PatientLogin">
-                                                    <i class="feather icon-user me-2"></i>
-                                                    Patient
-                                                </a>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Account" asp-action="Register">
-                                                    <i class="feather icon-user-plus me-2"></i>
-                                                    Register
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <partial name="_HeaderPartial"></partial>
+            <div class="d-flex justify-content-end align-items-center gap-3" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); z-index: 10; padding-left: 20px;">
+                @RenderSection("ExtraNav", required: false)
             </div>
         </header>
+
 
         <!-- Main Content -->
         <main class="page-content">
@@ -88,25 +24,14 @@
         </main>
 
         <!-- Footer -->
-        <footer class="site-footer style-1 bg-dark">
-            <div class="footer-bottom text-center">
-                <div class="container">
-                    <p class="copyright-text">© 2024 MedPal. All rights reserved.</p>
-                </div>
-            </div>
+        <footer class="site-footer style-1 overlay-primary-light" style="background-image: url(~/images/background/bg4.webp)">
+            <partial name="_FooterPartial"></partial>
         </footer>
+
+        <button class="scroltop" type="button"><i class="fas fa-arrow-up"></i></button>
     </div>
+    <partial name="_ScriptsPartial"></partial>
 
-    <!-- JavaScript Files -->
-    <script src="~/js/jquery.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="~/vendor/magnific-popup/magnific-popup.min.js"></script>
-    <script src="~/js/dz.carousel.js"></script>
-    <script src="~/js/dz.ajax.js"></script>
-    <script src="~/js/custom.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
