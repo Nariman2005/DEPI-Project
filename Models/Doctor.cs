@@ -30,10 +30,22 @@ namespace WebApplication1.Models
         public string Gender { get; set; }
         [Required]
         public int Age { get; set; }
-        ICollection<Appointment> Appointments { get; set; }
+
+        // **FIX: Add the isConfirmed property**
+        public ConfirmationStatus IsConfirmed { get; set; } = ConfirmationStatus.Pending;
+
+        public ICollection<Appointment> Appointments { get; set; }
         public int? ClinicId { get; set; }
         public Clinic Clinic { get; set; }
         public int ScheduleId { get; set; }
         public Schedule Schedule { get; set; }
+    }
+
+    // **FIX: Move enum outside the Doctor class**
+    public enum ConfirmationStatus
+    {
+        Pending = 1,
+        Confirmed = 2,
+        Cancelled = 3
     }
 }

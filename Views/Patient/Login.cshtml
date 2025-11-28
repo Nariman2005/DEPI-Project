@@ -1,0 +1,35 @@
+﻿
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow-sm login-card">
+                    <div class="card-body p-4">
+                        <h4 class="mb-3 login-title">Patient Login</h4>
+
+                        <form action="/Admin/Login" method="post" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input id="username" name="username" type="text" class="form-control" required autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input id="password" name="password" type="password" class="form-control" required>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <hr class="my-4">
+                            <a href="/Patient/Register" class="btn btn-outline-success">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Register as Patient
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
