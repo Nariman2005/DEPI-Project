@@ -1,6 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h1>Patient Profile</h1>
+﻿@model Patient
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Patient Dashboard</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-user-circle me-2"></i>
+                            Welcome to your profile, @Model.FirstName @Model.LastName!
+                        </div>
+
+                        <hr>
+
+                        <div class="row mt-4">
+                          
+
+                            <!-- Appointment History -->
+                            <div class="col-md-4 mb-3">
+                            <a href="/patient/AppointmentHistory/@Model.PatientId" class="text-decoration-none">
+                                    <div class="card bg-success text-white h-100 hover-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-history fa-3x mb-3"></i>
+                                            <h5>Appointment History</h5>
+                                            <p>View past appointments</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Payment History -->
+                            <div class="col-md-4 mb-3">
+                                <a href="/patient/payment/@Model.PatientId" class="text-decoration-none">
+                                    <div class="card bg-warning text-white h-100 hover-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-credit-card fa-3x mb-3"></i>
+                                            <h5>Payments</h5>
+                                            <p>View payment history</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                         </div>
+
+                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
