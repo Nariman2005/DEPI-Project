@@ -58,8 +58,6 @@ namespace WebApplication1.Controllers
         {
             try
             {
-           
-
                 // Check if parameters are received
                 if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
@@ -75,15 +73,10 @@ namespace WebApplication1.Controllers
                     return View();
                 }
 
-                
-                System.Diagnostics.Debug.WriteLine($"Found patient: {patient.FirstName}");
-
                 bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, patient.PasswordHashed);
-                
 
                 if (isPasswordValid)
                 {
-                    //TempData["PatientId"] = patient.PatientId;
                     return RedirectToAction("Profile", new { id = patient.PatientId });
                 }
                 else
@@ -94,7 +87,7 @@ namespace WebApplication1.Controllers
             }
             catch (Exception ex)
             {
-     
+                ViewBag.Error = "An error occurred during login.";
                 return View();
             }
         }
@@ -102,7 +95,6 @@ namespace WebApplication1.Controllers
         [Route("Patient/Profile/{id:int}")]
         public IActionResult Profile(int id)
         {
-
             // Fetch patient from database
             var patient = db.Patients.Find(id);
 
@@ -118,14 +110,45 @@ namespace WebApplication1.Controllers
         [Route("Patient/Payment/{id:int}")]
         public IActionResult Payment(int id)
         {
-          
+            var patient = db.Patients.Find(id);
+            if (patient == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Get patient's payments
+            var payments = db.Payments
+                .Join(db.Appointments, p => p.AppointmentId, a => a.AppointmentId, (p, a) => new { Payment = p, Appointment = a })
+                .Where(pa => pa.Appointment.PatientId == id)
+                .Select(pa => pa.Payment)
+                .OrderByDescending(p => p.PaidAt)
+                .ToList();
+
+            ViewBag.Patient = patient;
+            return View(payments);
+        }
+
+        [Route("Patient/AppointmentHistory/{id:int}")]
+        public IActionResult AppointmentHistory(int id)
+        {
+           
             return View();
         }
-        [Route("Patient/AppointmentHistory/{id:int}")]
-        public IActionResult AppointmentHistory()
+
+        // NEW: Upcoming Appointments Action
+        [Route("Patient/UpcomingAppointments/{id:int}")]
+        public IActionResult UpcomingAppointments(int id)
         {
             return View();
         }
 
+        // NEW: Profile Info Action
+        [Route("Patient/ProfileInfo/{id:int}")]
+        public IActionResult ProfileInfo(int id)
+        {
+           
+
+            return View();
+        }
     }
 }
