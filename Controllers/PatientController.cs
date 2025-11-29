@@ -131,8 +131,21 @@ namespace WebApplication1.Controllers
         [Route("Patient/AppointmentHistory/{id:int}")]
         public IActionResult AppointmentHistory(int id)
         {
-           
-            return View();
+            var patient = db.Patients.Find(id);
+            if (patient == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Get patient's past appointments
+            var appointmentHistory = db.Appointments
+                .Where(a => a.PatientId == id)
+                .Where(a => a.AppointmentDate < DateTime.Now)
+                .OrderByDescending(a => a.AppointmentDate)
+                .ToList();
+
+            ViewBag.Patient = patient;
+            return View(appointmentHistory);
         }
 
         // NEW: Upcoming Appointments Action
