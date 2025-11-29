@@ -38,8 +38,7 @@ namespace WebApplication1.Models
         public Doctor Doctor { get; set; }
         public int? ClinicId { get; set; }
         public Clinic Clinic { get; set; }
-        public int? PaymentId { get; set; }
-        public Payment? Payment { get; set; }
+      
         public int SessionId { get; set; }
         public VideoCallSession? VideoCallSession { get; set; }
 

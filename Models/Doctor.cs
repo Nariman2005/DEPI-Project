@@ -37,8 +37,7 @@ namespace WebApplication1.Models
         public ICollection<Appointment> Appointments { get; set; }
         public int? ClinicId { get; set; }
         public Clinic Clinic { get; set; }
-        public int ScheduleId { get; set; }
-        public Schedule Schedule { get; set; }
+       
     }
 
     // **FIX: Move enum outside the Doctor **
