@@ -41,7 +41,7 @@ namespace WebApplication1.Models
         public Schedule Schedule { get; set; }
     }
 
-    // **FIX: Move enum outside the Doctor class**
+    // **FIX: Move enum outside the Doctor **
     public enum ConfirmationStatus
     {
         Pending = 1,
