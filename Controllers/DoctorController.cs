@@ -1,120 +1,148 @@
-﻿//using Microsoft.AspNetCore.Mvc;
-//using WebApplication1.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models;
 
-//namespace WebApplication1.Controllers
-//{
-//    public class DoctorController : Controller
-//    {
-//        DBContext db;
+namespace WebApplication1.Controllers
+{
+    public class DoctorController : Controller
+    {
+        // Connection to Database
+        private readonly DBContext _context = new DBContext();
 
-//        public DoctorController()
-//        {
-//            db = new DBContext();
-//        }
+        // ==========================================
+        // 1. REGISTER (GET)
+        // ==========================================
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-//        [HttpGet]
-//        public IActionResult Register()
-//        {
-//            return View();
-//        }
+        // ==========================================
+        // 1. REGISTER (POST)
+        // ==========================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(Doctor doctor)
+        {
+            // FIX: Removed "Schedule" validation because the property is gone
+            ModelState.Remove("Appointments");
+            ModelState.Remove("Clinic");
 
-//        [HttpPost]
-//        public IActionResult Register(Doctor Doctor)
-//        {
-//            try
-//            {
-//                // Check if email already exists
-//                var existingPatient = db.Patients.FirstOrDefault(p => p.Email == Doctor.Email);
-//                if (existingPatient != null)
-//                {
-//                    ViewBag.Error = "Email already registered. Please use a different email or login.";
-//                    return View(Doctor);
-//                }
+            if (ModelState.IsValid)
+            {
+                doctor.IsConfirmed = ConfirmationStatus.Pending;
+                _context.Add(doctor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Login));
+            }
+            return View(doctor);
+        }
 
-//                // Hash password before saving
-//                Doctor.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(Doctor.PasswordHashed);
+        // ==========================================
+        // 2. LOGIN (GET)
+        // ==========================================
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-//                db.Patients.Add(Doctor);
-//                db.SaveChanges();
+        // ==========================================
+        // 2. LOGIN (POST)
+        // ==========================================
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            // FIX: Removed .Include(d => d.Schedule) because the relationship was removed from the model
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Email == email);
 
-//                ViewBag.Success = "Registration successful! Please login with your credentials.";
-//                return RedirectToAction("Login");
-//            }
-//            catch (Exception ex)
-//            {
-//                ViewBag.Error = $"Registration failed: {ex.Message}";
-//                return View(Doctor);
-//            }
-//        }
+            if (doctor == null || doctor.PasswordHashed != password)
+            {
+                ViewBag.Error = "Invalid Username or Password.";
+                return View();
+            }
 
-//        [HttpGet]
-//        public IActionResult Login()
-//        {
-//            return View();
-//        }
+            return RedirectToAction("Dashboard", new { id = doctor.DoctorId });
+        }
 
-//        [HttpPost]
-//        public IActionResult Login(string email, string password)
-//        {
-//            try
-//            {
+        // ==========================================
+        // 3. DASHBOARD
+        // ==========================================
+        public async Task<IActionResult> Dashboard(int? id)
+        {
+            if (id == null) return NotFound();
 
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(m => m.DoctorId == id);
 
-//                // Check if parameters are received
-//                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-//                {
-//                    ViewBag.Error = "Email and password are required.";
-//                    return View();
-//                }
+            if (doctor == null) return NotFound();
 
-//                var patient = db.Doctor.FirstOrDefault(p => p.Email == email);
+            // FIX: Fetch the schedule manually and put it in ViewBag
+            ViewBag.CurrentSchedule = await _context.Schedules.FirstOrDefaultAsync(s => s.DoctorId == id);
 
-//                if (patient == null)
-//                {
-//                    ViewBag.Error = "No account found with this email address.";
-//                    return View();
-//                }
+            return View(doctor);
+        }        // ==========================================
+        // 4. EDIT PROFILE (GET)
+        // ==========================================
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
 
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor == null) return NotFound();
 
-//                System.Diagnostics.Debug.WriteLine($"Found patient: {patient.FirstName}");
+            return View(doctor);
+        }
 
-//                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, patient.PasswordHashed);
+        // ==========================================
+        // 5. EDIT PROFILE (POST)
+        // ==========================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Doctor doctor)
+        {
+            if (id != doctor.DoctorId) return NotFound();
 
+            // FIX: Removed "Schedule" validation
+            ModelState.Remove("Appointments");
+            ModelState.Remove("Clinic");
 
-//                if (isPasswordValid)
-//                {
-//                    //TempData["PatientId"] = patient.PatientId;
-//                    return RedirectToAction("Doctor", new { id = Doctor.DoctorId });
-//                }
-//                else
-//                {
-//                    ViewBag.Error = "Invalid password. Please try again.";
-//                    return View();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingDoctor = await _context.Doctors.FindAsync(id);
 
-//                return View();
-//            }
-//        }
+                    if (existingDoctor == null) return NotFound();
 
-//        [Route("Doctor/Profile/{id:int}")]
-//        public IActionResult Profile(int id)
-//        {
+                    // Update allowed fields
+                    existingDoctor.FirstName = doctor.FirstName;
+                    existingDoctor.LastName = doctor.LastName;
+                    existingDoctor.PhoneNumber = doctor.PhoneNumber;
+                    existingDoctor.Age = doctor.Age;
+                    existingDoctor.Gender = doctor.Gender;
 
-//            // Fetch patient from database
-//            var Doctor = db.Doctors.Find(id);
+                    existingDoctor.Specialization = doctor.Specialization;
+                    existingDoctor.ExperienceYears = doctor.ExperienceYears;
+                    existingDoctor.LicenseNumber = doctor.LicenseNumber;
+                    existingDoctor.About = doctor.About;
+                    existingDoctor.Address = doctor.Address;
 
-//            if (Doctor == null)
-//            {
-//                ViewBag.Error = "Patient not found.";
-//                return RedirectToAction("Login");
-//            }
+                    existingDoctor.AvailableForVideo = doctor.AvailableForVideo;
+                    existingDoctor.ConsultationFee = doctor.ConsultationFee;
+                    existingDoctor.OnlineFee = doctor.OnlineFee;
 
-//            return View(Doctor);
-//        }
+                    _context.Update(existingDoctor);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Doctors.Any(e => e.DoctorId == doctor.DoctorId)) return NotFound();
+                    else throw;
+                }
 
-
-//    }
-//}
+                return RedirectToAction("Dashboard", new { id = doctor.DoctorId });
+            }
+            return View(doctor);
+        }
+    }
+}
