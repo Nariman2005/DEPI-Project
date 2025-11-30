@@ -16,26 +16,39 @@ namespace WebApplication1.Models
         {
             //optionsBuilder.UseSqlServer("Server=NISREEN;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
 
-            optionsBuilder.UseSqlServer("Server=NAREMAN-ADEL\\SQLEXPRESS;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
+            //optionsBuilder.UseSqlServer("Server=NAREMAN-ADEL\\SQLEXPRESS;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-
-            // Configure Payment -> Appointment (One-to-One)
-            modelBuilder.Entity<Appointment>()
-                  .HasOne(a => a.Payment)
-                  .WithOne(p => p.Appointment)
-                  .HasForeignKey<Payment>(p => p.AppointmentId)
-                  .OnDelete(DeleteBehavior.Cascade);
-            // Configure Schedule -> Doctor (One-to-One)
+            // =========================================================
+            // 1. Doctor <-> Schedule (One-to-One)
+            // =========================================================
             modelBuilder.Entity<Doctor>()
-              .HasOne(d => d.Schedule)
-              .WithOne(s => s.Doctor)
-              .HasForeignKey<Schedule>(s => s.DoctorId)
-              .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(d => d.Schedule)       // Doctor has one Schedule
+                .WithOne(s => s.Doctor)        // Schedule belongs to one Doctor
+                .HasForeignKey<Schedule>(s => s.DoctorId) // The FK is inside Schedule
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // =========================================================
+            // 2. Appointment <-> Payment (One-to-One)
+            // =========================================================
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Payment)
+                .WithOne(p => p.Appointment)
+                .HasForeignKey<Payment>(p => p.AppointmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // =========================================================
+            // 3. Money Precision Fixes (To prevent warnings)
+            // =========================================================
+            //modelBuilder.Entity<Doctor>().Property(d => d.ConsultationFee).HasColumnType("decimal(18,2)");
+            //modelBuilder.Entity<Doctor>().Property(d => d.OnlineFee).HasColumnType("decimal(18,2)");
+            //modelBuilder.Entity<Appointment>().Property(a => a.Fee).HasColumnType("decimal(18,2)");
+            //modelBuilder.Entity<Payment>().Property(p => p.Amount).HasColumnType("decimal(18,2)");
         }
     }
 }

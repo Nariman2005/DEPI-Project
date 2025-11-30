@@ -434,8 +434,7 @@ namespace WebApplication1.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("Schedule")
-                        .IsRequired();
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Patient", b =>
