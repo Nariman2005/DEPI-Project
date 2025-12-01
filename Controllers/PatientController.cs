@@ -222,7 +222,99 @@ namespace WebApplication1.Controllers
             return View(appointmentHistory);
         }
 
-     
+
+
+        // NEW: View Available Appointments (created by doctors)
+        [Route("Patient/AvailableAppointments/{id:int}")]
+        public IActionResult AvailableAppointments(int id)
+        {
+            var patient = db.Patients.Find(id);
+            if (patient == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Get appointments that are available for booking (PatientId is null)
+            var availableAppointments = db.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Clinic)
+                .Where(a => a.PatientId == null) // Available appointments
+                .Where(a => a.Status == AppointmentStatus.Pending)
+                .Where(a => a.AppointmentDate >= DateTime.Today) // Future appointments only
+                .OrderBy(a => a.AppointmentDate)
+                .ThenBy(a => a.AppointmentTime)
+                .ToList();
+
+            ViewBag.Patient = patient;
+            return View(availableAppointments);
+        }
+
+        // NEW: Book a specific appointment (insert PatientId)
+        [HttpPost]
+        [Route("Patient/BookAppointment")]
+        public IActionResult BookAppointment(int appointmentId, int patientId, string? symptoms)
+        {
+            try
+            {
+                var patient = db.Patients.Find(patientId);
+                var appointment = db.Appointments
+                    .Include(a => a.Doctor)
+                    .FirstOrDefault(a => a.AppointmentId == appointmentId);
+
+                if (patient == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                if (appointment == null)
+                {
+                    TempData["Error"] = "Appointment not found.";
+                    return RedirectToAction("AvailableAppointments", new { id = patientId });
+                }
+
+                // Check if appointment is still available
+                if (appointment.PatientId != null)
+                {
+                    TempData["Error"] = "This appointment has already been booked by another patient.";
+                    return RedirectToAction("AvailableAppointments", new { id = patientId });
+                }
+
+                // Book the appointment by inserting the PatientId
+                appointment.PatientId = patientId;
+                appointment.Status = AppointmentStatus.Confirmed;
+
+                // Add symptoms if provided
+                if (!string.IsNullOrEmpty(symptoms))
+                {
+                    appointment.Symptoms = symptoms;
+                }
+
+                // Set clinic if it's an in-person appointment
+                if (appointment.Type == AppointmentType.InPerson && appointment.Doctor.ClinicId.HasValue)
+                {
+                    appointment.ClinicId = appointment.Doctor.ClinicId;
+                }
+
+                // Generate session ID for video appointments
+                if (appointment.Type == AppointmentType.Video)
+                {
+                    appointment.SessionId = new Random().Next(100000, 999999);
+                }
+
+                db.SaveChanges();
+
+                TempData["Success"] = $"Appointment successfully booked with Dr. {appointment.Doctor.FirstName} {appointment.Doctor.LastName}!";
+                return RedirectToAction("UpcomingAppointments", new { id = patientId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Failed to book appointment: {ex.Message}";
+                return RedirectToAction("AvailableAppointments", new { id = patientId });
+            }
+        }
+
+
+
 
 
         // NEW: Upcoming Appointments Action
@@ -358,5 +450,7 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
         }
+
+
     }
 }

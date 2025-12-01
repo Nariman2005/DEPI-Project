@@ -1,0 +1,88 @@
+﻿@model List<WebApplication1.Models.Appointment>
+@{
+    ViewData["Title"] = "Available Appointments";
+    var patient = ViewBag.Patient as WebApplication1.Models.Patient;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Available Appointments</h2>
+        <a href="@Url.Action("Profile", new { id = patient?.PatientId })" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Profile
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var appointment in Model)
+            {
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title text-primary mb-0">
+                                    Dr. @appointment.Doctor.FirstName @appointment.Doctor.LastName
+                                </h5>
+                                <span class="badge @(appointment.Type == AppointmentType.Video ? "bg-info" : "bg-primary")">
+                                    @(appointment.Type == AppointmentType.Video ? "Video Call" : "In-Person")
+                                </span>
+                            </div>
+
+                            <div class="mb-3">
+                                <p class="mb-1"><strong>Specialty:</strong> @appointment.Doctor.Specialization</p>
+                                <p class="mb-1"><strong>Experience:</strong> @appointment.Doctor.ExperienceYears years</p>
+                                <p class="mb-1"><strong>Date:</strong> @appointment.AppointmentDate.ToString("MMMM dd, yyyy")</p>
+                                <p class="mb-1"><strong>Time:</strong> @appointment.AppointmentTime.ToString(@"hh\:mm")</p>
+                                <p class="mb-1"><strong>Fee:</strong> @appointment.Fee EGP</p>
+
+                                @if (appointment.Type == AppointmentType.InPerson && appointment.Doctor.Clinic != null)
+                                {
+                                    <p class="mb-0"><strong>Location:</strong> @appointment.Doctor.Clinic.ClinicName</p>
+                                }
+                            </div>
+
+                            <form method="post" asp-action="BookAppointment" class="d-grid">
+                                <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                <input type="hidden" name="patientId" value="@patient?.PatientId" />
+
+                                <div class="mb-3">
+                                    <label class="form-label">Symptoms (Optional)</label>
+                                    <textarea name="symptoms" class="form-control" rows="2"
+                                      placeholder="Describe your symptoms or reason for visit..."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-success"
+                                        onclick="return confirm('Are you sure you want to book this appointment?')">
+                                    <i class="fas fa-calendar-check me-1"></i>Book This Appointment
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>No available appointments at this time.</strong>
+            <br>Please check back later or contact the clinic directly.
+        </div>
+    }
+</div>

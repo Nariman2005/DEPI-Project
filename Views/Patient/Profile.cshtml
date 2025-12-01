@@ -69,17 +69,15 @@
                             </div>
 
                             <!-- Book New Appointment -->
-                            <div class="col-md-4 mb-3">
-                                <a href="/Patient/BookAppointment/@Model.PatientId" class="text-decoration-none">
-                                    <div class="card bg-dark text-white h-100 hover-card">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-plus-circle fa-3x mb-3"></i>
-                                            <h5>Book Appointment</h5>
-                                            <p>Schedule new appointment</p>
-                                        </div>
-                                    </div>
-                                </a>
+                        <a href="/Patient/AvailableAppointments/@Model.PatientId" class="text-decoration-none">
+                            <div class="card bg-dark text-white h-100 hover-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-plus-circle fa-3x mb-3"></i>
+                                    <h5>View Available Appointments</h5>
+                                    <p>Book from available slots</p>
+                                </div>
                             </div>
+                        </a>
 
                         <!-- Quick Patient Summary -->
                         <div class="row mt-4">
