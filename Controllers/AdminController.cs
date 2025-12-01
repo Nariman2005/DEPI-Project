@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -26,10 +27,7 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
-        /// <summary>
-        /// /hi
-        /// </summary>
-        /// <returns></returns>
+
         public IActionResult Dashboard()
         {
             ViewBag.TotalPatients = _context.Patients.Count();
@@ -47,7 +45,7 @@ namespace WebApplication1.Controllers
 
             return View();
         }
-        
+
         public IActionResult Patients()
         {
             var patients = _context.Patients
@@ -168,6 +166,63 @@ namespace WebApplication1.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Doctors");
+        }
+        public IActionResult Appointments()
+        {
+            var appointments = _context.Appointments
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .OrderByDescending(a => a.AppointmentDate)
+                .ToList();
+
+            return View(appointments);
+        }
+        public IActionResult AppointmentDetails(int id)
+        {
+            var appointment = _context.Appointments
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .Include(a => a.Clinic)
+                .FirstOrDefault(a => a.AppointmentId == id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            return View(appointment);
+        }
+
+        [HttpPost]
+        public IActionResult CancelAppointment(int id)
+        {
+            var appointment = _context.Appointments.Find(id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            appointment.Status = AppointmentStatus.Cancelled;
+            _context.SaveChanges();
+
+            return RedirectToAction("Appointments");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteAppointment(int id)
+        {
+            var appointment = _context.Appointments.Find(id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            _context.Appointments.Remove(appointment);
+            _context.SaveChanges();
+
+            return RedirectToAction("Appointments");
         }
     }
 }

@@ -1,0 +1,242 @@
+﻿@model IEnumerable<WebApplication1.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Manage Doctors";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-user-md"></i> Manage Doctors
+        </h1>
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <!-- Pending Doctors -->
+        var pendingDoctors = Model.Where(d => d.IsConfirmed == WebApplication1.Models.ConfirmationStatus.Pending).ToList();
+
+        @if (pendingDoctors.Any())
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>@pendingDoctors.Count</strong> doctor(s) pending approval
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0 text-dark">
+                        <i class="fas fa-clock"></i> Pending Approval
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Specialization</th>
+                                    <th>Experience</th>
+                                    <th>License Number</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var doctor in pendingDoctors)
+                                {
+                                    <tr>
+                                        <td>@doctor.DoctorId</td>
+                                        <td>@doctor.FirstName @doctor.LastName</td>
+                                        <td>@doctor.Email</td>
+                                        <td>@doctor.Specialization</td>
+                                        <td>@doctor.ExperienceYears years</td>
+                                        <td>@doctor.LicenseNumber</td>
+                                        <td>
+                                            <a href="@Url.Action("DoctorDetails", new { id = doctor.DoctorId })"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-success"
+                                                    onclick="confirmAction(@doctor.DoctorId, 'confirm', '@doctor.FirstName @doctor.LastName')">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="confirmAction(@doctor.DoctorId, 'reject', '@doctor.FirstName @doctor.LastName')">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Confirmed Doctors -->
+        var confirmedDoctors = Model.Where(d => d.IsConfirmed == WebApplication1.Models.ConfirmationStatus.Confirmed).ToList();
+
+        @if (confirmedDoctors.Any())
+        {
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-check-circle"></i> Confirmed Doctors
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Specialization</th>
+                                    <th>Experience</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var doctor in confirmedDoctors)
+                                {
+                                    <tr>
+                                        <td>@doctor.DoctorId</td>
+                                        <td>@doctor.FirstName @doctor.LastName</td>
+                                        <td>@doctor.Email</td>
+                                        <td>@doctor.PhoneNumber</td>
+                                        <td>@doctor.Specialization</td>
+                                        <td>@doctor.ExperienceYears years</td>
+                                        <td>
+                                            <a href="@Url.Action("DoctorDetails", new { id = doctor.DoctorId })"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="confirmDelete(@doctor.DoctorId, '@doctor.FirstName @doctor.LastName')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Rejected Doctors -->
+        var rejectedDoctors = Model.Where(d => d.IsConfirmed == WebApplication1.Models.ConfirmationStatus.Rejected).ToList();
+
+        @if (rejectedDoctors.Any())
+        {
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-times-circle"></i> Rejected Doctors
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Specialization</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var doctor in rejectedDoctors)
+                                {
+                                    <tr>
+                                        <td>@doctor.DoctorId</td>
+                                        <td>@doctor.FirstName @doctor.LastName</td>
+                                        <td>@doctor.Email</td>
+                                        <td>@doctor.Specialization</td>
+                                        <td>
+                                            <a href="@Url.Action("DoctorDetails", new { id = doctor.DoctorId })"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="confirmDelete(@doctor.DoctorId, '@doctor.FirstName @doctor.LastName')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No doctors registered yet.
+        </div>
+    }
+</div>
+
+<!-- Hidden Forms -->
+<form id="confirmForm" method="post" action="@Url.Action("ConfirmDoctor", "Admin")" style="display: none;">
+    <input type="hidden" id="confirmId" name="id" />
+</form>
+
+<form id="rejectForm" method="post" action="@Url.Action("RejectDoctor", "Admin")" style="display: none;">
+    <input type="hidden" id="rejectId" name="id" />
+</form>
+
+<form id="deleteForm" method="post" action="@Url.Action("DeleteDoctor", "Admin")" style="display: none;">
+    <input type="hidden" id="deleteId" name="id" />
+</form>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<script>
+    function confirmAction(id, action, name) {
+        var message = action === 'confirm'
+            ? 'Are you sure you want to approve Dr. ' + name + '?'
+            : 'Are you sure you want to reject Dr. ' + name + '?';
+
+        if (confirm(message)) {
+            if (action === 'confirm') {
+                document.getElementById('confirmId').value = id;
+                document.getElementById('confirmForm').submit();
+            } else {
+                document.getElementById('rejectId').value = id;
+                document.getElementById('rejectForm').submit();
+            }
+        }
+    }
+
+    function confirmDelete(id, name) {
+        if (confirm('Are you sure you want to delete Dr. ' + name + '? This action cannot be undone.')) {
+            document.getElementById('deleteId').value = id;
+            document.getElementById('deleteForm').submit();
+        }
+    }
+</script>

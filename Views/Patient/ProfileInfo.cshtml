@@ -1,1 +1,104 @@
-﻿
+﻿@model WebApplication1.Models.Patient
+
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Welcome, @Model.FirstName!</h2>
+            <p class="text-muted">Here is your health overview.</p>
+        </div>
+        <div>
+            <a asp-action="EditProfile" asp-route-id="@Model.PatientId" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Edit Profile
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-info mb-3 h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Upcoming</h5>
+                    <p class="card-text display-4 text-dark fw-bold">@ViewBag.UpcomingCount</p>
+                    <small class="text-muted">Appointments</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-secondary mb-3 h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-secondary">Past History</h5>
+                    <p class="card-text display-4 text-dark fw-bold">@ViewBag.PastCount</p>
+                    <small class="text-muted">Appointments</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-success mb-3 h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Total Paid</h5>
+                    <p class="card-text display-6 text-dark fw-bold">@ViewBag.TotalPaid.ToString("C")</p>
+                    <small class="text-muted">All time</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Next Appointment</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.NextAppointment != null)
+                    {
+                        var appt = ViewBag.NextAppointment as WebApplication1.Models.Appointment;
+                        <h4 class="card-title text-primary">@appt.AppointmentDate.ToString("MMM dd, yyyy")</h4>
+                        <p class="fw-bold">@DateTime.Today.Add(appt.AppointmentTime).ToString("hh:mm tt")</p>
+                        <hr />
+                        <p><strong>Doctor:</strong> Dr. @appt.Doctor?.FirstName @appt.Doctor?.LastName</p>
+                        <p><strong>Clinic:</strong> @appt.Clinic?.ClinicName</p>
+                        <a href="@Url.Action("UpcomingAppointments", new { id = Model.PatientId })" class="btn btn-outline-primary btn-sm">View All</a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mt-4">You have no upcoming appointments.</p>
+                        <div class="text-center">
+                            <button class="btn btn-success btn-sm">Book Now</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Personal Details</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Phone:</span> <strong>@Model.PhoneNumber</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Age/Gender:</span> <strong>@Model.Age / @Model.Gender</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Blood Group:</span> <strong>@Model.BloodGroup</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Email:</span> <strong>@Model.Email</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

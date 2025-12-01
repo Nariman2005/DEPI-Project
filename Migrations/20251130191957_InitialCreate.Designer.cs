@@ -12,13 +12,8 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(DBContext))]
-<<<<<<<< HEAD:Migrations/20251130184206_m2.Designer.cs
-    [Migration("20251130184206_m2")]
-    partial class m2
-========
     [Migration("20251130191957_InitialCreate")]
     partial class InitialCreate
->>>>>>>> d10e5f5c7764afb3a9e0de4bc7a2ffb92af2e642:Migrations/20251130191957_InitialCreate.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -442,13 +437,7 @@ namespace WebApplication1.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("Schedule")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Patient", b =>
-                {
-                    b.Navigation("Appointments");
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Patient", b =>

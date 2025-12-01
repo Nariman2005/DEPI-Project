@@ -42,7 +42,7 @@ namespace WebApplication1.Models
         public Clinic Clinic { get; set; }
         public Payment? Payment { get; set; }
 
-        public int SessionId { get; set; }
+        public int? SessionId { get; set; }
         public VideoCallSession? VideoCallSession { get; set; }
 
     
