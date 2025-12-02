@@ -368,6 +368,7 @@ namespace WebApplication1.Controllers
         }
 
         // NEW: Profile Info Action
+        // NEW: Profile Info Action
         [Route("Patient/ProfileInfo/{id:int}")]
         public IActionResult ProfileInfo(int id)
         {
@@ -380,8 +381,10 @@ namespace WebApplication1.Controllers
             var now = DateTime.Now;
             var today = DateTime.Today;
 
+            // 1. FIX: Filter out Cancelled appointments from the Count
             var upcomingCount = db.Appointments
                .Where(a => a.PatientId == id)
+               .Where(a => a.Status != AppointmentStatus.Cancelled) // <--- ADDED THIS
                .Where(a => a.AppointmentDate > today || (a.AppointmentDate == today && a.AppointmentTime >= now.TimeOfDay))
                .Count();
 
@@ -390,10 +393,12 @@ namespace WebApplication1.Controllers
                 .Where(a => a.AppointmentDate < today || (a.AppointmentDate == today && a.AppointmentTime < now.TimeOfDay))
                 .Count();
 
+            // 2. FIX: Filter out Cancelled appointments from the Next Appointment card
             var nextAppointment = db.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Clinic)
                 .Where(a => a.PatientId == id)
+                .Where(a => a.Status != AppointmentStatus.Cancelled) // <--- ADDED THIS
                 .Where(a => a.AppointmentDate > today || (a.AppointmentDate == today && a.AppointmentTime >= now.TimeOfDay))
                 .OrderBy(a => a.AppointmentDate)
                 .ThenBy(a => a.AppointmentTime)
@@ -405,8 +410,8 @@ namespace WebApplication1.Controllers
              .Select(pa => pa.Payment);
 
             var lastPayment = paymentsQuery
-                .OrderByDescending(p => p.PaidAt)
-                .FirstOrDefault();
+                 .OrderByDescending(p => p.PaidAt)
+                 .FirstOrDefault();
 
             var totalPaid = paymentsQuery
                 .Where(p => p.PaidAt != null)
@@ -421,7 +426,6 @@ namespace WebApplication1.Controllers
 
             return View(patient);
         }
-
 
         // 1. GET: Show the Edit Form
         [HttpGet]
