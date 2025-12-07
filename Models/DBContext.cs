@@ -16,8 +16,8 @@ namespace WebApplication1.Models
         {
             //optionsBuilder.UseSqlServer("Server=NISREEN;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
 
-            //optionsBuilder.UseSqlServer("Server=NAREMAN-ADEL\\SQLEXPRESS;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
+           optionsBuilder.UseSqlServer("Server=NAREMAN-ADEL\\SQLEXPRESS;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
+           // optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DepiDB;Trusted_Connection=True;TrustServerCertificate=true;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +42,11 @@ namespace WebApplication1.Models
                 .HasForeignKey<Payment>(p => p.AppointmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Appointment>()
+      .HasOne(a => a.VideoCallSession)
+      .WithOne(v => v.Appointment)
+      .HasForeignKey<VideoCallSession>(v => v.AppointmentId)
+      .OnDelete(DeleteBehavior.Cascade);
             // =========================================================
             // 3. Money Precision Fixes (To prevent warnings)
             // =========================================================
