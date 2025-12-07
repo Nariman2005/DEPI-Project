@@ -232,11 +232,6 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Appointments");
         }
 
-        // NEW PAYMENT MANAGEMENT FUNCTIONALITY
-
-        /// <summary>
-        /// Display all payments with filtering options
-        /// </summary>
         public IActionResult Payments(string status = "all")
         {
             var paymentsQuery = _context.Payments
@@ -280,9 +275,7 @@ namespace WebApplication1.Controllers
             return View(payments);
         }
 
-        /// <summary>
-        /// Display detailed information about a specific payment
-        /// </summary>
+      
         public IActionResult PaymentDetails(int id)
         {
             var payment = _context.Payments
@@ -302,9 +295,7 @@ namespace WebApplication1.Controllers
             return View(payment);
         }
 
-        /// <summary>
-        /// Approve a pending payment and mark it as completed
-        /// </summary>
+      
         [HttpPost]
         public IActionResult ApprovePayment(int id, string? transactionId = null)
         {
@@ -351,9 +342,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Reject a pending payment and mark it as failed
-        /// </summary>
+        
         [HttpPost]
         public IActionResult RejectPayment(int id, string? rejectionReason = null)
         {
@@ -398,49 +387,5 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Bulk approve multiple pending payments
-        /// </summary>
-        [HttpPost]
-        public IActionResult BulkApprovePayments(int[] paymentIds)
-        {
-            if (paymentIds == null || paymentIds.Length == 0)
-            {
-                TempData["Warning"] = "No payments selected for approval.";
-                return RedirectToAction("Payments", new { status = "pending" });
-            }
-
-            try
-            {
-                var pendingPayments = _context.Payments
-                    .Where(p => paymentIds.Contains(p.PaymentId) && p.PaymentStatus == PaymentStatus.Pending)
-                    .ToList();
-
-                if (!pendingPayments.Any())
-                {
-                    TempData["Warning"] = "No valid pending payments found for approval.";
-                    return RedirectToAction("Payments", new { status = "pending" });
-                }
-
-                foreach (var payment in pendingPayments)
-                {
-                    payment.PaymentStatus = PaymentStatus.Completed;
-                    payment.PaidAt = DateTime.Now;
-                    payment.TransactionId = $"BULK_ADMIN_{DateTime.Now:yyyyMMddHHmmss}_{payment.PaymentId}";
-                }
-
-                _context.SaveChanges();
-
-                TempData["Success"] = $"Successfully approved {pendingPayments.Count} payments.";
-                return RedirectToAction("Payments", new { status = "completed" });
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = $"Failed to approve payments: {ex.Message}";
-                return RedirectToAction("Payments", new { status = "pending" });
-            }
-        }
-
-      
     }
 }
