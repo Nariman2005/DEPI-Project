@@ -118,7 +118,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                // Get patient with appointments, payments, and related data
+                
                 var patient = db.Patients
                     .Include(p => p.Appointments)
                         .ThenInclude(a => a.Payment)
@@ -133,10 +133,10 @@ namespace WebApplication1.Controllers
                     return RedirectToAction("Login");
                 }
 
-                // Check if patient has appointments and create pending payments for appointments without payments
+                
                 if (patient.Appointments.Any())
                 {
-                    // Get appointments that don't have payments yet (excluding cancelled appointments)
+                   
                     var appointmentsWithoutPayments = patient.Appointments
                         .Where(a => a.Payment == null && a.Status != AppointmentStatus.Cancelled)
                         .ToList();
