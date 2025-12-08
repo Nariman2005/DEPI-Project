@@ -23,35 +23,28 @@
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm bg-warning text-dark">
                     <div class="card-body text-center">
-                        <h3>@Model.Count(a => a.Status.ToString() == "Scheduled")</h3>
+                        <h3>@Model.Count(a => a.Status.ToString() == "Pending")</h3>
                         <p class="mb-0">Scheduled</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card border-0 shadow-sm bg-success text-dark">
                     <div class="card-body text-center">
-                        <h3>@Model.Count(a => a.Status.ToString() == "Completed")</h3>
+                        <h3>@Model.Count(a => a.Status.ToString() == "Confirmed")</h3>
                         <p class="mb-0">Completed</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-danger text-white">
+                <div class="card border-0 shadow-sm bg-danger text-dark">
                     <div class="card-body text-center">
                         <h3>@Model.Count(a => a.Status.ToString() == "Cancelled")</h3>
                         <p class="mb-0">Cancelled</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-secondary text-white">
-                    <div class="card-body text-center">
-                        <h3>@Model.Count(a => a.Status.ToString() == "NoShow")</h3>
-                        <p class="mb-0">No Show</p>
-                    </div>
-                </div>
-            </div>
+           
         </div>
 
         <!-- Filter Tabs -->
@@ -149,10 +142,7 @@
                                                 {
                                                     <span class="badge bg-danger">Cancelled</span>
                                                 }
-                                                else if (status == "NoShow")
-                                                {
-                                                    <span class="badge bg-secondary">No Show</span>
-                                                }
+                                               
                                                 else
                                                 {
                                                     <span class="badge bg-secondary">@status</span>
@@ -199,7 +189,7 @@
             <!-- Scheduled Appointments Tab -->
             <div class="tab-pane fade" id="scheduled" role="tabpanel">
                 @{
-                    var scheduledAppointments = Model.Where(a => a.Status.ToString() == "Scheduled").ToList();
+                    var scheduledAppointments = Model.Where(a => a.Status.ToString() == "Pending").ToList();
                 }
 
                 @if (scheduledAppointments.Any())
@@ -295,7 +285,7 @@
             <!-- Completed Appointments Tab -->
             <div class="tab-pane fade" id="completed" role="tabpanel">
                 @{
-                    var completedAppointments = Model.Where(a => a.Status.ToString() == "Completed").ToList();
+                    var completedAppointments = Model.Where(a => a.Status.ToString() == "Confirmed").ToList();
                 }
 
                 @if (completedAppointments.Any())
