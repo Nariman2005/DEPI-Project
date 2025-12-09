@@ -593,7 +593,7 @@ namespace WebApplication1.Controllers
                 ViewBag.Success = "Profile updated successfully!";
                 return RedirectToAction("ProfileInfo", new { id = model.PatientId });
             }
-            catch (Exception ex)
+                catch (Exception ex)
             {
                 ViewBag.Error = "Error updating profile: " + ex.Message;
                 return View(model);

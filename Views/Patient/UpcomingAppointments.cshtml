@@ -101,7 +101,6 @@
                                         }
                                         else
                                         {
-                                            // FIX: Get Address Only (Clinic -> Doctor's Clinic -> Doctor's Address)
                                             var address = item.Clinic?.Address
                                             ?? item.Doctor?.Clinic?.Address
                                             ?? item.Doctor?.Address
@@ -109,9 +108,7 @@
 
                                             var city = item.Clinic?.City
                                             ?? item.Doctor?.Clinic?.City
-                                            ?? "";
-
-                                            // Removed Clinic Name, displaying Address directly
+                                            ?? ""; 
                                             <span class="d-block text-dark fw-bold">
                                                 <i class="bi bi-geo-alt me-1"></i>@address
                                             </span>

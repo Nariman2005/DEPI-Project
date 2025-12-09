@@ -64,7 +64,6 @@
                     {
                         var appt = ViewBag.NextAppointment as WebApplication1.Models.Appointment;
 
-                        // تجهيز العنوان (نفس المنطق: العيادة -> عيادة الدكتور -> عنوان الدكتور)
                         var address = appt.Clinic?.Address
                         ?? appt.Doctor?.Clinic?.Address
                         ?? appt.Doctor?.Address
